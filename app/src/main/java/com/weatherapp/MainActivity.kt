@@ -11,37 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterEngineCache
-import com.weathermodule.weather_module.WeatherModulePlugin
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    private lateinit var flutterEngine: FlutterEngine
-    private lateinit var weatherService: FlutterWeatherService
-    private lateinit var weatherPlugin: WeatherModulePlugin
-    
-    companion object {
-        private const val FLUTTER_ENGINE_ID = "weather_engine"
-    }
+    private lateinit var weatherService: DirectWeatherService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Initialize Flutter engine (minimal setup for plugin)
-        flutterEngine = FlutterEngine(this)
-        
-        // Register the weather module plugin
-        weatherPlugin = WeatherModulePlugin()
-        
-        // Use FlutterEngine's plugin registry to register the plugin
-        // This automatically handles the plugin binding
-        flutterEngine.plugins.add(weatherPlugin)
-        
-        FlutterEngineCache.getInstance().put(FLUTTER_ENGINE_ID, flutterEngine)
-        
-        // Initialize weather service that uses Flutter module
-        weatherService = FlutterWeatherService(flutterEngine)
+        // Initialize direct weather service (no FlutterEngine needed)
+        // This avoids the libapp.so error by calling the API directly
+        weatherService = DirectWeatherService()
         
         setContent {
             WeatherAppTheme {
@@ -49,22 +29,10 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    
-    override fun onDestroy() {
-        super.onDestroy()
-        if (::weatherPlugin.isInitialized && ::flutterEngine.isInitialized) {
-            // Remove plugin from registry (using plugin class)
-            flutterEngine.plugins.remove(WeatherModulePlugin::class.java)
-        }
-        if (::flutterEngine.isInitialized) {
-            FlutterEngineCache.getInstance().remove(FLUTTER_ENGINE_ID)
-            flutterEngine.destroy()
-        }
-    }
 }
 
 @Composable
-fun WeatherScreen(weatherService: FlutterWeatherService) {
+fun WeatherScreen(weatherService: DirectWeatherService) {
     var cityName by remember { mutableStateOf("") }
     var temperature by remember { mutableStateOf<Double?>(null) }
     var isLoading by remember { mutableStateOf(false) }

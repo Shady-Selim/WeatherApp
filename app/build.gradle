@@ -18,10 +18,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        ndk {
-            // Filter for architectures supported by Flutter
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
-        }
     }
 
     buildTypes {
@@ -71,24 +67,16 @@ dependencies {
     
     // Flutter Embedding (required for FlutterEngine and plugin support)
     // The weather module AAR requires Flutter embedding to be available
-    def flutterVersion = '1.0.0-1bdc0afd0afd7cc46c5212765d8ab54b6134fa4c'
-    implementation "io.flutter:flutter_embedding_release:$flutterVersion"
-    implementation "io.flutter:arm64_v8a_release:$flutterVersion"
-    implementation "io.flutter:armeabi_v7a_release:$flutterVersion"
-    implementation "io.flutter:x86_64_release:$flutterVersion"
+    implementation "io.flutter:flutter_embedding_release:1.0.0-1bdc0afd0afd7cc46c5212765d8ab54b6134fa4c"
 
     // Weather Module AAR (built with Kotlin 2.0.0) - Using POM from 'flutter build aar'
     // Group ID: com.weathermodule.weather_module (from pubspec.yaml package)
     // Artifact: flutter_debug, flutter_release
-    // Version: 1.0.3 (from pubspec.yaml)
+    // Version: 1.0.4 (from pubspec.yaml)
     
-    debugImplementation 'com.weathermodule.weather_module:flutter_debug:1.0.3'
-    releaseImplementation 'com.weathermodule.weather_module:flutter_release:1.0.3'
-    
-    // Fallback: If POM dependencies fail, uncomment these:
-    // debugImplementation(name: 'weather_module-debug', ext: 'aar')
-    // releaseImplementation(name: 'weather_module-release', ext: 'aar')
-    
+    debugImplementation 'com.weathermodule.weather_module:flutter_debug:1.0.4'
+    releaseImplementation 'com.weathermodule.weather_module:flutter_release:1.0.4'
+
     // Testing
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
