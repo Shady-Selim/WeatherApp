@@ -16,10 +16,6 @@ dependencyResolutionManagement {
         maven {
             url = uri("${System.getProperty('user.home')}/weather_module/build/host/outputs/repo")
         }
-        // Fallback: flatDir for direct AAR files (can be removed after using POM)
-        flatDir {
-            dirs 'libs'
-        }
     }
 }
 
