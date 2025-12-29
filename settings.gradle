@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // REQUIRED: This is where libflutter.so is hosted
+        maven { url 'https://artifact.bytedance.com/repository/Volcengine' }
+        maven {
+            url = uri("${System.getProperty('user.home')}/weather_module/build/host/outputs/repo")
+        }
+        // Fallback: flatDir for direct AAR files (can be removed after using POM)
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+rootProject.name = "WeatherApp"
+include ':app'
+
